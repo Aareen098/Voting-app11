@@ -15,27 +15,26 @@ const Dashboard = () => {
   const [results, setResults] = useState([]);
 
   const handleVote = async (candidate) => {
-    try {
-      const token = localStorage.getItem("token");
+  try {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const token = storedUser?.token;
 
-      await axios.post(
-        "http://localhost:5000/api/vote",
-        { candidate },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    await axios.post(
+      "http://localhost:5000/api/vote",
+      { candidate },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-      setVoted(true);
-      setMessage("✅ Vote submitted successfully!");
-    } catch (error) {
-      console.log(error.response);
-      console.log(error.response?.data);
-      setMessage(error.response?.data?.message || "Something went wrong");
-    }
-  };
+    setVoted(true);
+    setMessage("✅ Vote submitted successfully!");
+  } catch (error) {
+    setMessage(error.response?.data?.message || "Something went wrong");
+  }
+};
 
   useEffect(() => {
   const fetchResults = async () => {

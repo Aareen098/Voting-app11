@@ -5,29 +5,40 @@ import React from "react";
 
 const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
 
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Restore user from localStorage on refresh
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setUser({ token });
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
     }
+
+    setLoading(false);
   }, []);
 
-  const login = (token) => {
-    localStorage.setItem("token", token);
-    setUser({ token });
+  const login = (token, userData) => {
+    const userObject = {
+      token,
+      ...userData,
+    };
+
+    localStorage.setItem("user", JSON.stringify(userObject));
+    setUser(userObject);
     navigate("/dashboard");
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
     navigate("/login");
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
