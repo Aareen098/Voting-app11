@@ -1,12 +1,13 @@
-const express =  require("express");
+const express = require("express");
 const router = express.Router();
-const protect = require("../middleware/authMiddleware");
 
-router.get("/dashboard", protect, (req,res) => {
-    res.json({
-        message: "Welcome to protected dashboard",
-        userId: req.user
-    });
-});
+const upload = require("../middleware/uploadMiddleware");
+const { updateProfile } = require("../controllers/userController");
 
-module.exports = router;
+router.put(
+  "/profile",
+  upload.single("profileImage"),
+  updateProfile
+);
+
+module.exports = router;   // 🔥 THIS LINE IS REQUIRED

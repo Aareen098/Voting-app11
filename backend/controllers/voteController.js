@@ -25,6 +25,8 @@ exports.submitVote = async (req, res) => {
       vote
     });
 
+    req.io.emit("voteUpdated");
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -45,6 +47,34 @@ exports.getResults = async (req, res) => {
     res.json(results);
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.getMyVote = async (req, res) => {
+  try {
+    const vote = await Vote.findOne({ user: req.user });
+
+    if (!vote) {
+      return res.json({ voted: false });
+    }
+
+    res.json({
+      voted: true,
+      candidate: vote.candidate
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.resetVotes = async (req, res) => {
+  try {
+    await Vote.deleteMany({});
+    res.json({ message: "All votes have been reset" });
+
+  } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };
