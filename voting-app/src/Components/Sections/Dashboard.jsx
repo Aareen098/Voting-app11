@@ -55,7 +55,7 @@ const DEFAULT_AVATAR = "/default-avatar.png";
 
 useEffect(() => {
 
-socketRef.current = io("http://localhost:5000");
+socketRef.current = io("https://voting-backend-tdci.onrender.com");
 
 socketRef.current.on("voteUpdated", fetchResults);
 socketRef.current.on("candidateUpdated", fetchCandidates);
@@ -68,12 +68,12 @@ return () => socketRef.current.disconnect();
 // ================= FETCH =================
 
 const fetchCandidates = async () => {
-const res = await axios.get("http://localhost:5000/api/candidates");
+const res = await axios.get("https://voting-backend-tdci.onrender.com/api/candidates");
 setCandidates(res.data);
 };
 
 const fetchResults = async () => {
-const res = await axios.get("http://localhost:5000/api/vote/results");
+const res = await axios.get("https://voting-backend-tdci.onrender.com/api/vote/results");
 setResults(res.data);
 };
 
@@ -82,7 +82,7 @@ const fetchMyVote = async () => {
 if (!token) return;
 
 const res = await axios.get(
-"http://localhost:5000/api/vote/my-vote",
+"https://voting-backend-tdci.onrender.com/api/vote/my-vote",
 { headers: { Authorization: `Bearer ${token}` } }
 );
 
@@ -113,7 +113,7 @@ if (!confirmVote) return;
 try {
 
 await axios.post(
-"http://localhost:5000/api/vote",
+"https://voting-backend-tdci.onrender.com/api/vote",
 { candidate },
 { headers: { Authorization: `Bearer ${token}` } }
 );
@@ -166,7 +166,7 @@ formData.append("image", candidateImage);
 if (editingId) {
 
 await axios.put(
-`http://localhost:5000/api/candidates/${editingId}`,
+`https://voting-backend-tdci.onrender.com/api/candidates/${editingId}`,
 formData,
 { headers: { Authorization: `Bearer ${token}` } }
 );
@@ -176,7 +176,7 @@ setMessage("Candidate updated");
 } else {
 
 await axios.post(
-"http://localhost:5000/api/candidates",
+"https://voting-backend-tdci.onrender.com/api/candidates",
 formData,
 { headers: { Authorization: `Bearer ${token}` } }
 );
@@ -217,7 +217,7 @@ const confirmDelete = window.confirm(
 if (!confirmDelete) return;
 
 await axios.delete(
-`http://localhost:5000/api/candidates/${id}`,
+`https://voting-backend-tdci.onrender.com/api/candidates/${id}`,
 { headers: { Authorization: `Bearer ${token}` } }
 );
 
@@ -340,7 +340,7 @@ className="bg-white/20 p-6 rounded-2xl text-center"
 <img
 src={
 candidate.image
-? `http://localhost:5000/uploads/${candidate.image}`
+? `https://voting-backend-tdci.onrender.com/uploads/${candidate.image}`
 : DEFAULT_AVATAR
 }
 alt={candidate.name}

@@ -9,7 +9,7 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [preview, setPreview] = useState(
     storedUser?.profileImage
-      ? `http://localhost:5000/uploads/${storedUser.profileImage}`
+      ? `https://voting-backend-tdci.onrender.com/uploads/${storedUser.profileImage}`
       : "/default-avatar.png"
   );
 
@@ -38,7 +38,7 @@ const Profile = () => {
     }
 
     const res = await axios.put(
-      "http://localhost:5000/api/user/update",
+      "https://voting-backend-tdci.onrender.com/api/user/update",
       formData,
       { headers: { Authorization: `Bearer ${token}` } }
     );
