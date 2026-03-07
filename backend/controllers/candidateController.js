@@ -1,4 +1,4 @@
-const Candidate = require("../models/Candidate");
+const Candidate = require("../models/candidate");
 
 exports.getCandidates = async (req, res) => {
   const candidates = await Candidate.find();
