@@ -18,10 +18,13 @@ const io = new Server(server, {
 
 // ================= MIDDLEWARE =================
 app.set("io", io);
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
-
 
 // ================= ROUTES =================
 const userRoutes = require("./routes/userRoutes");
@@ -34,7 +37,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/vote", voteRoutes);
 app.use("/api/candidates", candidateRoutes);
 
-
 // ================= SOCKET CONNECTION =================
 io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
@@ -45,7 +47,6 @@ io.on("connection", (socket) => {
 });
 
 // ================= MAKE IO GLOBAL =================
-
 
 // ================= DATABASE =================
 mongoose

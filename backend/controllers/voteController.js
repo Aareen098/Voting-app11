@@ -1,4 +1,4 @@
-const Vote = require("../models/Vote");
+const Vote = require("../models/vote");
 
 exports.submitVote = async (req, res) => {
   try {
