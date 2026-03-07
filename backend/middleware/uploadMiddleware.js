@@ -1,17 +1,15 @@
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "voting-app",
+    allowed_formats: ["jpg", "png", "jpeg"]
+  }
 });
 
-const upload = multer({
-  storage: storage,
-});
+const upload = multer({ storage });
 
-module.exports = upload; // ✅ VERY IMPORTANT
+module.exports = upload;

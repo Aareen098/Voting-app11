@@ -16,7 +16,7 @@ exports.addCandidate = async (req, res) => {
     const candidate = await Candidate.create({
       name,
       party,
-      image: req.file ? req.file.filename : null,
+      image: req.file ? req.file.path : null,
     });
 
     // 🔥 Emit real-time update

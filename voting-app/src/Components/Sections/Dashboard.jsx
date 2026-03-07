@@ -338,11 +338,7 @@ className="bg-white/20 p-6 rounded-2xl text-center"
 <div className="w-full h-48 bg-white/10 flex items-center justify-center rounded mb-3">
 
 <img
-src={
-candidate.image
-? `https://voting-backend-tdci.onrender.com/uploads/${candidate.image}`
-: DEFAULT_AVATAR
-}
+src={candidate.image || DEFAULT_AVATAR}
 alt={candidate.name}
 className="max-h-full max-w-full object-contain"
 />

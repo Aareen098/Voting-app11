@@ -18,6 +18,8 @@ router.post(
   "/",
   protect,
   adminOnly,
+  authMiddleware,
+  adminMiddleware,
   upload.single("image"),
   addCandidate
 );
