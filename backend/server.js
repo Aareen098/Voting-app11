@@ -8,21 +8,33 @@ const { Server } = require("socket.io");
 dotenv.config();
 
 const app = express();
-const server = http.createServer(app); // ✅ create http server
+const server = http.createServer(app);
+
+// ================= ALLOWED ORIGINS =================
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://voting-app11.vercel.app"
+];
+
+// ================= SOCKET.IO =================
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173", // your frontend port
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE"],
-  },
+    credentials: true
+  }
 });
 
 // ================= MIDDLEWARE =================
 app.set("io", io);
+
 app.use(
   cors({
-    origin: "*",
+    origin: allowedOrigins,
+    credentials: true
   })
 );
+
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
@@ -46,16 +58,15 @@ io.on("connection", (socket) => {
   });
 });
 
-// ================= MAKE IO GLOBAL =================
-
 // ================= DATABASE =================
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-// ================= START SERVER =================
-const PORT = 5000;
+// ================= SERVER =================
+const PORT = process.env.PORT || 5000;
+
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
