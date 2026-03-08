@@ -11,13 +11,43 @@ const AuthProvider = ({ children }) => {
 
   // Restore user from localStorage on refresh
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
-    setLoading(false);
+    const verifyUser = async () => {
+  
+      const storedUser = localStorage.getItem("user");
+  
+      if (!storedUser) {
+        setLoading(false);
+        return;
+      }
+  
+      const parsedUser = JSON.parse(storedUser);
+  
+      try {
+  
+        const res = await fetch("https://voting-backend-tdci.onrender.com/api/auth/verifyToken", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${parsedUser.token}`
+          }
+        });
+  
+        const data = await res.json();
+  
+        if (data.valid) {
+          setUser(parsedUser);
+        } else {
+          localStorage.removeItem("user");
+          setUser(null);
+        }
+  
+      } catch (error) {
+        localStorage.removeItem("user");
+        setUser(null);
+      }
+      setLoading(false);
+    };
+    verifyUser();
   }, []);
 
   const login = (token, userData) => {
